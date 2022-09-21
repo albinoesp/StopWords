@@ -3,8 +3,12 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+import java.io.IOException;
+
 public class stopWords {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException{
 
         if (args.length == 0) {
             System.out.println("Falta el nombre de archivo");
@@ -12,15 +16,20 @@ public class stopWords {
         }
 
         FileReader fi = null;
+        FileReader stopword = null;
         try {
             fi = new FileReader(args[0]);
+            stopword = new FileReader((args[1]));
         } catch (FileNotFoundException ex) {
             System.out.println(ex.getMessage());
             System.exit(-1);
         }
 
+
+
         //Usar para leer linea x linea el archivo
         BufferedReader inputFile = new BufferedReader(fi);
+        BufferedReader inputword = new BufferedReader(stopword);
 
         String textLine = null;
 
@@ -30,10 +39,13 @@ public class stopWords {
 
         String delimiters = "\\s+|,\\s*|\\.\\s*|\\;\\s*|\\:\\s*|\\!\\s*|\\¡\\s*|\\¿\\s*|\\?\\s*|\\-\\s*"
                 + "|\\[\\s*|\\]\\s*|\\(\\s*|\\)\\s*|\\\"\\s*|\\_\\s*|\\%\\s*|\\+\\s*|\\/\\s*|\\#\\s*|\\$\\s*";
-
-
+        Set<String> wordslist = new HashSet<>();
+        String l;
+        while ((l = inputword.readLine()) != null) {
+            wordslist.add(l);
+        }
         // Lista con todas las palabras diferentes
-        ArrayList<String> list = new ArrayList<String>();
+        Set<String> list = new HashSet<>();
 
         // Tiempo inicial
         long startTime = System.currentTimeMillis();
@@ -93,6 +105,17 @@ public class stopWords {
         } catch (IOException ex) {
             System.out.println(ex.getMessage());
         }
+
+        for(String li: list){
+            for(String w: wordslist){
+                if(li != w){
+                    System.out.println(li);
+                }
+            }
+
+        }
+
+
 
     }
 }
